@@ -4,15 +4,42 @@ set nocompatible            " Make vim not vi-compatible
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
 endif
+
 call plug#begin()
 
-"" --NERDTree--
+"" --File Tree--
 Plug 'scrooloose/nerdtree'
 autocmd VimEnter * NERDTree | wincmd p
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
+"" --Code Syntax Highlighting--
+Plug 'sheerun/vim-polyglot'
+
+"" --Fuzzy File Searching
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+nnoremap <silent> <C-t> :Files<CR>
+
+"" --Linter--
+Plug 'dense-analysis/ale'
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+
+"" --Intellisense
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+
+inoremap <silent><expr> <c-space> coc#refresh()
 
 call plug#end()
 
