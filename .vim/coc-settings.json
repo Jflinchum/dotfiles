@@ -1,0 +1,9 @@
+{
+  "suggest.noselect": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "diagnostic.checkCurrentLine": true,
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true
+}
